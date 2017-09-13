@@ -14,7 +14,10 @@ main (int argc, char* argv[])
 {
   ControllerApplication app;
   
-  app.initialize ();
+  if (!app.initialize (argc, argv))
+  {
+	return -1;
+  }
   
   app.run ();
   
