@@ -14,52 +14,52 @@
 
 namespace NS_Controller
 {
-  
+
   class OdomEstimation
   {
   public:
-    OdomEstimation ();
+    OdomEstimation();
 
     virtual
-    ~OdomEstimation ();
+    ~OdomEstimation();
 
     bool
-    update (const NS_NaviCommon::Time& filter_time);
+    update(const NS_NaviCommon::Time& filter_time);
 
     void
-    initialize (const NS_Transform::Transform& prior,
-                const NS_NaviCommon::Time& time);
+    initialize(const NS_Transform::Transform& prior,
+               const NS_NaviCommon::Time& time);
 
-    bool isInitialized ()
+    bool isInitialized()
     {
       return initialized;
     }
 
     void
-    getEstimate (MatrixWrapper::ColumnVector& estimate);
+    getEstimate(MatrixWrapper::ColumnVector& estimate);
 
     void
-    getEstimate (NS_Transform::Transform& estimate);
+    getEstimate(NS_Transform::Transform& estimate);
 
     void
-    addMeasurement (const std::string& meas_type,
-                    const NS_Transform::Transform& meas);
+    addMeasurement(const std::string& meas_type,
+                   const NS_Transform::Transform& meas);
 
     void
-    addMeasurement (const std::string& meas_type,
-                    const NS_Transform::Transform& meas,
-                    const MatrixWrapper::SymmetricMatrix& covar);
+    addMeasurement(const std::string& meas_type,
+                   const NS_Transform::Transform& meas,
+                   const MatrixWrapper::SymmetricMatrix& covar);
 
   private:
     void
-    angleOverflowCorrect (double& a, double ref);
+    angleOverflowCorrect(double& a, double ref);
 
     void
-    decomposeTransform (const NS_Transform::StampedTransform& trans, double& x,
-                        double& y, double&z, double&Rx, double& Ry, double& Rz);
+    decomposeTransform(const NS_Transform::StampedTransform& trans, double& x,
+                       double& y, double&z, double&Rx, double& Ry, double& Rz);
     void
-    decomposeTransform (const NS_Transform::Transform& trans, double& x,
-                        double& y, double&z, double&Rx, double& Ry, double& Rz);
+    decomposeTransform(const NS_Transform::Transform& trans, double& x,
+                       double& y, double&z, double&Rx, double& Ry, double& Rz);
 
     BFL::AnalyticSystemModelGaussianUncertainty* sys_model_;
     NS_Controller::NonLinearAnalyticConditionalGaussianOdo* sys_pdf_;
@@ -78,7 +78,7 @@ namespace NS_Controller
         imu_meas_old_;
 
     NS_NaviCommon::Time filter_time_old_;
-    
+
     bool initialized;
 
   };

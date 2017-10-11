@@ -31,7 +31,7 @@
 
 namespace NS_Controller
 {
-  
+
   typedef struct
   {
     double x;
@@ -43,13 +43,13 @@ namespace NS_Controller
     double pitch;
     double yaw;
   } PoseState;
-  
+
   class ControllerApplication: public Application
   {
   public:
-    ControllerApplication ();
+    ControllerApplication();
     virtual
-    ~ControllerApplication ();
+    ~ControllerApplication();
   private:
     SpiComm* comm;
 
@@ -64,10 +64,10 @@ namespace NS_Controller
 
     OdomEstimation estimation;
 
-    NS_Service::Server<NS_ServiceType::ServiceOdometry>* odom_srv;
-    NS_Service::Server<NS_ServiceType::ServiceTransform>* odom_tf_srv;
+    NS_Service::Server< NS_ServiceType::ServiceOdometry >* odom_srv;
+    NS_Service::Server< NS_ServiceType::ServiceTransform >* odom_tf_srv;
 
-    NS_DataSet::Subscriber<NS_DataType::Twist>* twist_sub;
+    NS_DataSet::Subscriber< NS_DataType::Twist >* twist_sub;
   private:
     std::string comm_dev_name_;
 
@@ -103,39 +103,39 @@ namespace NS_Controller
 #ifdef USE_SIMULATOR
     SimulateController simulator;
 #endif
-    
+
   private:
-    
-    void
-    odomService (NS_ServiceType::ServiceOdometry& odometry);
-    void
-    odomTransformService (NS_ServiceType::ServiceTransform& transform);
 
     void
-    velocityCallback (NS_DataType::Twist& twist);
+    odomService(NS_ServiceType::ServiceOdometry& odometry);
+    void
+    odomTransformService(NS_ServiceType::ServiceTransform& transform);
 
     void
-    loadParameters ();
+    velocityCallback(NS_DataType::Twist& twist);
+
     void
-    configController ();
+    loadParameters();
+    void
+    configController();
 
     bool
-    checkDevice ();
+    checkDevice();
 
     PoseState
-    getBasePose ();
+    getBasePose();
 
     void
-    getPoseLoop (double frequency);
+    getPoseLoop(double frequency);
 
     void
-    estimate ();
+    estimate();
 
   public:
     virtual void
-    run ();
+    run();
     virtual void
-    quit ();
+    quit();
   };
 
 } /* namespace NS_Controller */

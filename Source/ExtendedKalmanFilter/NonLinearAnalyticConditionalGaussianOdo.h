@@ -7,7 +7,7 @@ using namespace BFL;
 
 namespace NS_Controller
 {
-  /// Non Linear Conditional Gaussian
+/// Non Linear Conditional Gaussian
   /**
    - \f$ \mu = Matrix[1] . ConditionalArguments[0] +
    Matrix[2]. ConditionalArguments[1]  + ... + Noise.\mu \f$
@@ -24,17 +24,17 @@ namespace NS_Controller
      the corresponding conditional argument!
      @param additiveNoise Pdf representing the additive Gaussian uncertainty
      */
-    NonLinearAnalyticConditionalGaussianOdo (const Gaussian& additiveNoise);
+    NonLinearAnalyticConditionalGaussianOdo(const Gaussian& additiveNoise);
 
     /// Destructor
     virtual
-    ~NonLinearAnalyticConditionalGaussianOdo ();
+    ~NonLinearAnalyticConditionalGaussianOdo();
 
     // redefine virtual functions
     virtual MatrixWrapper::ColumnVector
-    ExpectedValueGet () const;
+    ExpectedValueGet() const;
     virtual MatrixWrapper::Matrix
-    dfGet (unsigned int i) const;
+    dfGet(unsigned int i) const;
 
   private:
     mutable MatrixWrapper::Matrix df;

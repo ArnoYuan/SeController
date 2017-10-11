@@ -14,13 +14,13 @@
 
 namespace NS_Controller
 {
-  
+
   class SpiComm
   {
   public:
-    SpiComm (std::string device_name);
+    SpiComm(std::string device_name);
     virtual
-    ~SpiComm ();
+    ~SpiComm();
 
   private:
     std::string dev_name;
@@ -32,37 +32,37 @@ namespace NS_Controller
     boost::mutex dev_lock;
 
     bool
-    transfer (unsigned char* tx_buf, unsigned char* rx_buf, size_t tx_len,
-              size_t rx_len);
+    transfer(unsigned char* tx_buf, unsigned char* rx_buf, size_t tx_len,
+             size_t rx_len);
 
     unsigned short sequence;
 
   public:
     bool
-    open ();
+    open();
 
     void
-    close ();
+    close();
 
     bool
-    getRegister (unsigned short address, int length, unsigned char* bytes);
+    getRegister(unsigned short address, int length, unsigned char* bytes);
     bool
-    setRegister (unsigned short address, unsigned char* bytes, int length);
+    setRegister(unsigned short address, unsigned char* bytes, int length);
 
     double
-    getFloat64Value (unsigned short address);
+    getFloat64Value(unsigned short address);
     void
-    setFloat64Value (unsigned short address, double value);
+    setFloat64Value(unsigned short address, double value);
 
     float
-    getFloat32Value (unsigned short address);
+    getFloat32Value(unsigned short address);
     void
-    setFloat32Value (unsigned short address, float value);
+    setFloat32Value(unsigned short address, float value);
 
     int
-    getInt32Value (unsigned short address);
+    getInt32Value(unsigned short address);
     void
-    setInt32Value (unsigned short address, int value);
+    setInt32Value(unsigned short address, int value);
   };
 
 } /* namespace NS_Controller */

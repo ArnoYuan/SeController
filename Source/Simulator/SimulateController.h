@@ -15,19 +15,21 @@
 
 namespace NS_Controller
 {
-  
+
   typedef enum
   {
-    SE_USER_ROLL_STOP = 0, SE_USER_ROLL_FORWARD, SE_USER_ROLL_BACKWARD,
+    SE_USER_ROLL_STOP = 0,
+    SE_USER_ROLL_FORWARD,
+    SE_USER_ROLL_BACKWARD,
   } SeUserRollStates;
-  
+
   typedef struct
   {
     unsigned short nEncode;
     unsigned short nSpeed;
     SeUserRollStates tState;
   } SeUserRollInfo;
-  
+
   typedef struct
   {
     double fX;
@@ -36,22 +38,22 @@ namespace NS_Controller
     double angularVel;
     double linearVel;
   } SeUserOdometry;
-  
+
   typedef struct
   {
     double fLinear;
     double fAngular;
   } SeUserVelocity;
-  
+
   class SimulateController
   {
   public:
-    SimulateController ()
+    SimulateController()
     {
     }
     ;
 
-    ~SimulateController ()
+    ~SimulateController()
     {
     }
     ;
@@ -89,58 +91,58 @@ namespace NS_Controller
     boost::thread simulate_controller_thread;
 
     void
-    controllerPolling (void);
+    controllerPolling(void);
     void
-    SeUserMotionCalcRollSpeed (SeUserVelocity tVel, short *tLeftSpeed,
-                               short *tRightSpeed);
+    SeUserMotionCalcRollSpeed(SeUserVelocity tVel, short *tLeftSpeed,
+                              short *tRightSpeed);
     SeUserOdometry
-    SeUserOdometryCalculate (int nLeftEncoderDelta, int nRightEncoderDelta,
-                             unsigned int nDeltaTime);
+    SeUserOdometryCalculate(int nLeftEncoderDelta, int nRightEncoderDelta,
+                            unsigned int nDeltaTime);
     //void SeUserMotionCalcRollSpeed(SeUserVelocity tVel, short *tLeftSpeed, short *tRightSpeed);
-    
+
     bool running;
   public:
-    
-    void
-    setBaseTicksPerMeter (double ticksPerMeter);
-    void
-    setBaseWheelTrack (double wheelTrack);
-    void
-    setBaseWheelDiameter (double wheelDiameter);
-    void
-    setBaseEncoderResolution (double encoderResolution);
-    void
-    setBaseGearReduction (double gearReduction);
-    void
-    setAccelLimit (double accelLimit);
-    void
-    setDuration (int duration);
-    void
-    setLinearVel (double angularVel);
-    void
-    setAngularVel (double linearVel);
-
-    double
-    getAngularVel (void);
-    double
-    getLinearVel (void);
-    double
-    getX (void);
-    double
-    getY (void);
-    double
-    getTheta (void);
 
     void
-    motionCallback (void);
+    setBaseTicksPerMeter(double ticksPerMeter);
+    void
+    setBaseWheelTrack(double wheelTrack);
+    void
+    setBaseWheelDiameter(double wheelDiameter);
+    void
+    setBaseEncoderResolution(double encoderResolution);
+    void
+    setBaseGearReduction(double gearReduction);
+    void
+    setAccelLimit(double accelLimit);
+    void
+    setDuration(int duration);
+    void
+    setLinearVel(double angularVel);
+    void
+    setAngularVel(double linearVel);
+
+    double
+    getAngularVel(void);
+    double
+    getLinearVel(void);
+    double
+    getX(void);
+    double
+    getY(void);
+    double
+    getTheta(void);
+
+    void
+    motionCallback(void);
 
   public:
     void
-    initialize ();
+    initialize();
     void
-    run ();
+    run();
     void
-    quit ();
+    quit();
   };
 }
 
