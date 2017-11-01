@@ -26,5 +26,4 @@ SUBDIRS := \
 Source/Communication \
 Source \
 Source/ExtendedKalmanFilter \
-Source/Simulator \
 

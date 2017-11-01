@@ -8,7 +8,6 @@ RM := rm -rf
 
 # All of the sources participating in the build are defined here
 -include sources.mk
--include Source/Simulator/subdir.mk
 -include Source/ExtendedKalmanFilter/subdir.mk
 -include Source/Communication/subdir.mk
 -include Source/subdir.mk
