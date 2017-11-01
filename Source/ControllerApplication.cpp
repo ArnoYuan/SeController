@@ -32,13 +32,13 @@ namespace NS_Controller
     {1e-9, 0, 0, 0, 0, 0, 0, 1e-3, 1e-9, 0, 0, 0, 0, 0, 1e6, 0, 0, 0, 0, 0, 0, 1e6, 0, 0, 0, 0, 0, 0, 1e6, 0, 0, 0, 0, 0, 0, 1e-9};
 
   static double imu_orientation_covariance[] =
-    {0.0025, 0, 0, 0, 0.0025, 0, 0, 0, 0.0025};
+    {1e6, 0, 0, 0, 1e6, 0, 0, 0, 1e-6};
 
   static double imu_angular_velocity_covariance[] =
-    {0.02, 0, 0, 0, 0.02, 0, 0, 0, 0.02};
+    {1e6, 0, 0, 0, 1e6, 0, 0, 0, 1e-6};
 
   static double imu_linear_acceleration_covariance[] =
-    {0.04, 0, 0, 0, 0.04, 0, 0, 0, 0.04};
+    {-1, 0, 0, 0, 0, 0, 0, 0, 0};
 
   ControllerApplication::ControllerApplication()
   {
@@ -94,7 +94,7 @@ namespace NS_Controller
         current_odometry.pose.position.x = original_pose.x;
         current_odometry.pose.position.y = original_pose.y;
         current_odometry.pose.orientation = ori_msg;
-
+        showing
         NS_Transform::quaternionMsgToTF(ori_msg, ori_trans);
 
         current_odom_transform = NS_Transform::Transform(
