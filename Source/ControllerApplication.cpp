@@ -94,7 +94,6 @@ namespace NS_Controller
         current_odometry.pose.position.x = original_pose.x;
         current_odometry.pose.position.y = original_pose.y;
         current_odometry.pose.orientation = ori_msg;
-        showing
         NS_Transform::quaternionMsgToTF(ori_msg, ori_trans);
 
         current_odom_transform = NS_Transform::Transform(
@@ -121,6 +120,10 @@ namespace NS_Controller
     NS_Transform::Transform odom_measure;
     odom_measure = NS_Transform::Transform(
         qo, NS_Transform::Vector3(original_pose.x, original_pose.y, 0));
+
+    console.debug("Base odometry: %f, %f, %f.", original_pose.x, original_pose.y, original_pose.theta);
+    console.debug("Base velocity: %f, %f.", original_pose.linear_vel, original_pose.angular_vel);
+    console.debug("Base Imu yaw: %f", original_pose.yaw);
 
     //add odom measure
     MatrixWrapper::SymmetricMatrix odom_covar(6);
@@ -165,6 +168,8 @@ namespace NS_Controller
       NS_Transform::poseTFToMsg(current_odom_transform, current_odometry.pose);
 
       current_odom_transform.getOrigin().setZ(0.0);
+
+      console.debug("EKF transform : %f, %f, %f", current_odometry.pose.position.x, current_odometry.pose.position.y, NS_Transform::getYaw(current_odometry.pose.orientation));
     }
 
     if(!estimation.isInitialized())
@@ -177,14 +182,6 @@ namespace NS_Controller
       NS_ServiceType::ServiceOdometry& odometry)
   {
     boost::mutex::scoped_lock locker_(base_lock);
-
-#ifdef USE_SIMULATOR
-    x = simulator.getX ();
-    y = simulator.getY ();
-    theta = simulator.getTheta ();
-    linear_vel = simulator.getLinearVel ();
-    angular_vel = simulator.getAngularVel ();
-#endif
 
     current_odometry.twist.linear.x = original_pose.linear_vel;
     current_odometry.twist.angular.z = original_pose.angular_vel;
@@ -206,11 +203,9 @@ namespace NS_Controller
     p.linear_vel = comm->getFloat64Value(BASE_REG_ODOM_LINEAR_VEL);
     p.angular_vel = comm->getFloat64Value(BASE_REG_ODOM_ANGULAR_VEL);
 
-    /*
-     p.roll = comm->getFloat64Value (BASE_REG_IMU_ROLL);
-     p.pitch = comm->getFloat64Value (BASE_REG_IMU_PITCH);
-     p.yaw = comm->getFloat64Value (BASE_REG_IMU_YAW);
-     */
+    p.roll = comm->getFloat64Value (BASE_REG_IMU_ROLL);
+    p.pitch = comm->getFloat64Value (BASE_REG_IMU_PITCH);
+    p.yaw = comm->getFloat64Value (BASE_REG_IMU_YAW);
 
     return p;
   }
@@ -219,12 +214,6 @@ namespace NS_Controller
       NS_ServiceType::ServiceTransform& transform)
   {
     boost::mutex::scoped_lock locker_(base_lock);
-
-#ifdef USE_SIMULATOR
-    current_pose.x = simulator.getX ();
-    current_pose.y = simulator.getY ();
-    current_pose.theta = simulator.getTheta ();
-#endif
 
     NS_Transform::transformTFToMsg(current_odom_transform, transform.transform);
     transform.result = true;
@@ -240,11 +229,6 @@ namespace NS_Controller
     comm->setFloat64Value(BASE_REG_LINEAR_V, linear);
     comm->setFloat64Value(BASE_REG_ANGULAR_V, angular);
     comm->setInt32Value(BASE_REG_V_SETTED, 1);
-
-#ifdef USE_SIMULATOR
-    simulator.setLinearVel (linear);
-    simulator.setAngularVel (angular);
-#endif
 
   }
 
@@ -349,22 +333,7 @@ namespace NS_Controller
       return;
     }
 
-    /*
-     #ifndef USE_SIMULATOR
-     if (!checkDevice ())
-     {
-     NS_NaviCommon::console.error ("test base controller failure!");
-     return;
-     }
-     #endif
-     */
-
     configController();
-
-#ifdef USE_SIMULATOR
-    simulator.initialize ();
-    simulator.run ();
-#endif
 
     running = true;
 

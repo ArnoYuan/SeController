@@ -23,11 +23,8 @@
 #include <boost/thread/thread.hpp>
 
 #include "Communication/SpiComm.h"
-#include "Simulator/SimulateController.h"
 
 #include "ExtendedKalmanFilter/Estimation.h"
-
-//#define USE_SIMULATOR
 
 namespace NS_Controller
 {
@@ -99,10 +96,6 @@ namespace NS_Controller
     int control_duration_;
 
     bool use_ekf_;
-
-#ifdef USE_SIMULATOR
-    SimulateController simulator;
-#endif
 
   private:
 
