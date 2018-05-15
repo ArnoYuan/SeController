@@ -26,6 +26,10 @@
 
 #include "ExtendedKalmanFilter/Estimation.h"
 
+#include <slam/hector/mapping.h>
+
+#include <>
+
 namespace NS_Controller
 {
 
@@ -55,9 +59,10 @@ namespace NS_Controller
     boost::thread get_pose_thread;
 
     PoseState original_pose;
-
+    //sgbot::Pose2D original_pose;
+    sgbot::tf::Transform2D current_odom_transform;
     NS_DataType::Odometry current_odometry;
-    NS_Transform::Transform current_odom_transform;
+    //NS_Transform::Transform current_odom_transform;
 
     OdomEstimation estimation;
 
@@ -102,7 +107,7 @@ namespace NS_Controller
     void
     odomService(NS_ServiceType::ServiceOdometry& odometry);
     void
-    odomTransformService(NS_ServiceType::ServiceTransform& transform);
+    odomTransformService(sgbot::tf::Transform2D& transform);
 
     void
     velocityCallback(NS_DataType::Twist& twist);

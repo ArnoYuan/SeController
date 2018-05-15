@@ -16,6 +16,7 @@
 #include <Time/Utils.h>
 #include <Time/Time.h>
 #include <Parameter/Parameter.h>
+#include <transform/transform2d.h>
 
 namespace NS_Controller
 {
@@ -48,7 +49,7 @@ namespace NS_Controller
     odom_srv = new NS_Service::Server< NS_ServiceType::ServiceOdometry >(
         "BASE_ODOM",
         boost::bind(&ControllerApplication::odomService, this, _1));
-    odom_tf_srv = new NS_Service::Server< NS_ServiceType::ServiceTransform >(
+    odom_tf_srv = new NS_Service::Server< sgbot::tf::Transform2D >(
         "BASE_ODOM_TF",
         boost::bind(&ControllerApplication::odomTransformService, this, _1));
 
@@ -56,7 +57,7 @@ namespace NS_Controller
         "TWIST",
         boost::bind(&ControllerApplication::velocityCallback, this, _1));
 
-    current_odom_transform.setIdentity();
+    //current_odom_transform.setIdentity();
   }
 
   ControllerApplication::~ControllerApplication()
@@ -83,7 +84,7 @@ namespace NS_Controller
       {
         boost::mutex::scoped_lock locker_(base_lock);
 
-        NS_Transform::Quaternion ori_trans;
+        //NS_Transform::Quaternion ori_trans;
         NS_DataType::Quaternion ori_msg;
 
         ori_msg.x = 0.0f;
@@ -94,11 +95,14 @@ namespace NS_Controller
         current_odometry.pose.position.x = original_pose.x;
         current_odometry.pose.position.y = original_pose.y;
         current_odometry.pose.orientation = ori_msg;
-        NS_Transform::quaternionMsgToTF(ori_msg, ori_trans);
+        //NS_Transform::quaternionMsgToTF(ori_msg, ori_trans);
 
+        current_odom_transform = sgbot::tf::Transform2D(original_pose.x, original_pose.y, original_pose.theta, 1);
+/*
         current_odom_transform = NS_Transform::Transform(
             ori_trans,
             NS_Transform::Vector3(original_pose.x, original_pose.y, 0));
+            */
       }
       rate.sleep();
     }
@@ -163,13 +167,13 @@ namespace NS_Controller
 
       estimation.getEstimate(ekf_trans);
 
-      current_odom_transform = ekf_trans;
+      //current_odom_transform = ekf_trans;
 
-      NS_Transform::poseTFToMsg(current_odom_transform, current_odometry.pose);
+     // NS_Transform::poseTFToMsg(current_odom_transform, current_odometry.pose);
 
-      current_odom_transform.getOrigin().setZ(0.0);
+      //current_odom_transform.getOrigin().setZ(0.0);
 
-      console.debug("EKF transform : %f, %f, %f", current_odometry.pose.position.x, current_odometry.pose.position.y, NS_Transform::getYaw(current_odometry.pose.orientation));
+     // console.debug("EKF transform : %f, %f, %f", current_odometry.pose.position.x, current_odometry.pose.position.y, NS_Transform::getYaw(current_odometry.pose.orientation));
     }
 
     if(!estimation.isInitialized())
@@ -211,12 +215,12 @@ namespace NS_Controller
   }
 
   void ControllerApplication::odomTransformService(
-      NS_ServiceType::ServiceTransform& transform)
+      sgbot::tf::Transform2D& transform)
   {
     boost::mutex::scoped_lock locker_(base_lock);
-
-    NS_Transform::transformTFToMsg(current_odom_transform, transform.transform);
-    transform.result = true;
+    transform = current_odom_transform;
+    //NS_Transform::transformTFToMsg(current_odom_transform, transform.transform);
+    //transform.result = true;
   }
 
   void ControllerApplication::velocityCallback(NS_DataType::Twist& twist)
