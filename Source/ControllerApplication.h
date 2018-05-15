@@ -68,7 +68,7 @@ namespace NS_Controller
     OdomEstimation estimation;
 
     NS_Service::Server< NS_ServiceType::ServiceOdometry >* odom_srv;
-    NS_Service::Server< NS_ServiceType::ServiceTransform >* odom_tf_srv;
+    NS_Service::Server< sgbot::tf::Transform2D >* odom_tf_srv;
 
     NS_DataSet::Subscriber< NS_DataType::Twist >* twist_sub;
   private:
