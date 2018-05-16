@@ -19,6 +19,7 @@
 #include <Time/Duration.h>
 #include <Service/Server.h>
 #include <DataSet/Subscriber.h>
+#include <DataSet/Publisher.h>
 
 #include <boost/thread/thread.hpp>
 
@@ -71,6 +72,9 @@ namespace NS_Controller
     NS_Service::Server< sgbot::tf::Transform2D >* odom_tf_srv;
 
     NS_DataSet::Subscriber< NS_DataType::Twist >* twist_sub;
+    NS_DataSet::Publisher<int>* slave_action_pub;
+    NS_DataSet::Subscriber<int>* slave_action_sub;
+    NS_DataSet::Publisher<int>*slave_event_pub;
   private:
     std::string comm_dev_name_;
 
@@ -112,6 +116,10 @@ namespace NS_Controller
 
     void
     velocityCallback(NS_DataType::Twist& twist);
+
+    void slaveActionSubscriber(int action);
+
+    void slaveEventSubcriber(int event);
 
     void
     loadParameters();

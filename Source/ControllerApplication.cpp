@@ -57,6 +57,17 @@ namespace NS_Controller
         "TWIST",
         boost::bind(&ControllerApplication::velocityCallback, this, _1));
 
+    slave_action_pub = new NS_DataSet::Publisher<int>(
+    	"BASE_REG_ACTION"
+    	);
+
+    slave_action_sub = new NS_DataSet::Subscriber<int>(
+    	"BASE_REG_ACTION",
+		boost::bind(&ControllerApplication::slaveActionSubscriber, this, _1));
+    slave_event_pub = new NS_DataSet::Publisher<int>(
+    	"BASE_REG_EVENT"
+    	);
+
     //current_odom_transform.setIdentity();
   }
 
@@ -104,6 +115,10 @@ namespace NS_Controller
             NS_Transform::Vector3(original_pose.x, original_pose.y, 0));
             */
       }
+      int action = comm->getInt32Value(BASE_REG_ACTION);
+      int event = comm->getInt32Value(BASE_REG_EVENT);
+      slave_action_pub->publish(action);
+      slave_action_pub->publish(event);
       rate.sleep();
     }
   }
@@ -234,6 +249,12 @@ namespace NS_Controller
     comm->setFloat64Value(BASE_REG_ANGULAR_V, angular);
     comm->setInt32Value(BASE_REG_V_SETTED, 1);
 
+  }
+
+
+  void ControllerApplication::slaveActionSubscriber(int action)
+  {
+	  comm->setInt32Value(BASE_REG_EVENT, action);
   }
 
   void ControllerApplication::loadParameters()
