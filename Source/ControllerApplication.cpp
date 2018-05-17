@@ -125,12 +125,16 @@ namespace NS_Controller
       }
       int action = comm->getInt32Value(BASE_REG_ACTION);
       int event = comm->getInt32Value(BASE_REG_EVENT);
-      comm->setInt32Value(BASE_REG_EVENT, 0);
+      if(event!=0)
+      {
+    	  DBG_PRINT("[pub event]%d, clear!\n", event);
+    	  comm->setInt32Value(BASE_REG_EVENT, 0);
+      }
+
 
       slave_action_pub->publish(action);
-      slave_action_pub->publish(event);
+      slave_event_pub->publish(event);
       DBG_PRINT("[pub action]%d\n", action);
-      DBG_PRINT("[pub event]%d\n", event);
       rate.sleep();
     }
   }
