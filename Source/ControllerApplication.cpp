@@ -126,7 +126,7 @@ namespace NS_Controller
       int action = comm->getInt32Value(BASE_REG_ACTION);
       if(last_action!=action)
       {
-    	  action = last_action;
+    	  last_action = action;
     	  slave_action_pub->publish(action);
     	  DBG_PRINT("[pub action]%d\n", action);
       }
