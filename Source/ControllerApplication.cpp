@@ -17,6 +17,12 @@
 #include <Time/Time.h>
 #include <Parameter/Parameter.h>
 
+#define USE_DBG
+#ifdef USE_DBG
+#define DBG_PRINT printf
+#else
+DBG_PRINT
+#endif
 
 namespace NS_Controller
 {
@@ -46,7 +52,7 @@ namespace NS_Controller
     memset(&original_pose, 0, sizeof(original_pose));
     memset(&current_odometry, 0, sizeof(current_odometry));
 
-    odom_srv = new NS_Service::Server< NS_ServiceType::ServiceOdometry >(
+    odom_srv = new NS_Service::Server< sgbot::Odometry >(
         "BASE_ODOM",
         boost::bind(&ControllerApplication::odomService, this, _1));
     odom_tf_srv = new NS_Service::Server< sgbot::tf::Transform2D >(
@@ -102,11 +108,13 @@ namespace NS_Controller
         ori_msg.y = 0.0f;
         ori_msg.z = sin(original_pose.theta / 2.0f);
         ori_msg.w = cos(original_pose.theta / 2.0f);
-
+/*
         current_odometry.pose.position.x = original_pose.x;
         current_odometry.pose.position.y = original_pose.y;
         current_odometry.pose.orientation = ori_msg;
         //NS_Transform::quaternionMsgToTF(ori_msg, ori_trans);
+  */
+
 
         current_odom_transform = sgbot::tf::Transform2D(original_pose.x, original_pose.y, original_pose.theta, 1);
 /*
@@ -117,8 +125,12 @@ namespace NS_Controller
       }
       int action = comm->getInt32Value(BASE_REG_ACTION);
       int event = comm->getInt32Value(BASE_REG_EVENT);
+      comm->setInt32Value(BASE_REG_EVENT, 0);
+
       slave_action_pub->publish(action);
       slave_action_pub->publish(event);
+      DBG_PRINT("[pub action]%d\n", action);
+      DBG_PRINT("[pub event]%d\n", event);
       rate.sleep();
     }
   }
@@ -198,16 +210,17 @@ namespace NS_Controller
   }
 
   void ControllerApplication::odomService(
-      NS_ServiceType::ServiceOdometry& odometry)
+		  sgbot::Odometry& odometry)
   {
     boost::mutex::scoped_lock locker_(base_lock);
 
+    odometry.pose2d.Pose2D(original_pose.x, original_pose.y, original_pose.theta);
+    odometry.velocity2d.linear = original_pose.linear_vel;
+    odometry.velocity2d.angular = original_pose.angular_vel;
+/*
     current_odometry.twist.linear.x = original_pose.linear_vel;
     current_odometry.twist.angular.z = original_pose.angular_vel;
-
-    odometry.odom = current_odometry;
-    odometry.result = true;
-
+    */
   }
 
   PoseState ControllerApplication::getBasePose()
@@ -254,6 +267,7 @@ namespace NS_Controller
 
   void ControllerApplication::slaveActionSubscriber(int action)
   {
+	  DBG_PRINT("[action sub]%d\n", action);
 	  comm->setInt32Value(BASE_REG_EVENT, action);
   }
 

@@ -30,6 +30,7 @@
 #include <slam/hector/mapping.h>
 
 #include <transform/transform2d.h>
+#include <type/odometry.h>
 
 
 namespace NS_Controller
@@ -68,7 +69,7 @@ namespace NS_Controller
 
     OdomEstimation estimation;
 
-    NS_Service::Server< NS_ServiceType::ServiceOdometry >* odom_srv;
+    NS_Service::Server< sgbot::Odometry >* odom_srv;
     NS_Service::Server< sgbot::tf::Transform2D >* odom_tf_srv;
 
     NS_DataSet::Subscriber< NS_DataType::Twist >* twist_sub;
@@ -110,7 +111,7 @@ namespace NS_Controller
   private:
 
     void
-    odomService(NS_ServiceType::ServiceOdometry& odometry);
+    odomService(sgbot::Odometry& odometry);
     void
     odomTransformService(sgbot::tf::Transform2D& transform);
 
