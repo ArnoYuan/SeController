@@ -214,7 +214,7 @@ namespace NS_Controller
   {
     boost::mutex::scoped_lock locker_(base_lock);
 
-    odometry.pose2d.Pose2D(original_pose.x, original_pose.y, original_pose.theta);
+    odometry.pose2d= sgbot::Pose2D(original_pose.x, original_pose.y, original_pose.theta);
     odometry.velocity2d.linear = original_pose.linear_vel;
     odometry.velocity2d.angular = original_pose.angular_vel;
 /*
