@@ -268,7 +268,7 @@ namespace NS_Controller
   void ControllerApplication::slaveActionSubscriber(int action)
   {
 	  DBG_PRINT("[action sub]>>>>>%d\n", action);
-	  comm->setInt32Value(BASE_REG_EVENT, action);
+	  comm->setInt32Value(BASE_REG_ACTION, action);
   }
 
   void ControllerApplication::loadParameters()
