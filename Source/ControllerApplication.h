@@ -108,6 +108,8 @@ namespace NS_Controller
 
     bool use_ekf_;
 
+    int last_action;
+
   private:
 
     void
