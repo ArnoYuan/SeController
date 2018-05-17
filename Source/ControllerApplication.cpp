@@ -64,14 +64,14 @@ namespace NS_Controller
         boost::bind(&ControllerApplication::velocityCallback, this, _1));
 
     slave_action_pub = new NS_DataSet::Publisher<int>(
-    	"BASE_REG_ACTION"
+    	"SLAVE_ACTION"
     	);
 
     slave_action_sub = new NS_DataSet::Subscriber<int>(
-    	"BASE_REG_ACTION",
+    	"MASTER_ACTION",
 		boost::bind(&ControllerApplication::slaveActionSubscriber, this, _1));
     slave_event_pub = new NS_DataSet::Publisher<int>(
-    	"BASE_REG_EVENT"
+    	"SLAVE_EVENT"
     	);
 
     //current_odom_transform.setIdentity();
@@ -267,7 +267,7 @@ namespace NS_Controller
 
   void ControllerApplication::slaveActionSubscriber(int action)
   {
-	  DBG_PRINT("[action sub]%d\n", action);
+	  DBG_PRINT("[action sub]>>>>>%d\n", action);
 	  comm->setInt32Value(BASE_REG_EVENT, action);
   }
 
