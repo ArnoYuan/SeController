@@ -59,7 +59,7 @@ namespace NS_Controller
         "BASE_ODOM_TF",
         boost::bind(&ControllerApplication::odomTransformService, this, _1));
 
-    twist_sub = new NS_DataSet::Subscriber< NS_DataType::Twist >(
+    twist_sub = new NS_DataSet::Subscriber< sgbot::Velocity2D >(
         "TWIST",
         boost::bind(&ControllerApplication::velocityCallback, this, _1));
 
@@ -259,13 +259,13 @@ namespace NS_Controller
     //transform.result = true;
   }
 
-  void ControllerApplication::velocityCallback(NS_DataType::Twist& twist)
+  void ControllerApplication::velocityCallback(sgbot::Velocity2D& velocity2d)
   {
     boost::mutex::scoped_lock locker_(base_lock);
 
-    double linear = twist.linear.x;
-    double angular = twist.angular.z;
-
+    double linear = velocity2d.linear;
+    double angular = velocity2d.angular;
+    DBG_PRINT("[velocity2d][%f,%f]\n", linear, angular);
     comm->setFloat64Value(BASE_REG_LINEAR_V, linear);
     comm->setFloat64Value(BASE_REG_ANGULAR_V, angular);
     comm->setInt32Value(BASE_REG_V_SETTED, 1);

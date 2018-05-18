@@ -31,6 +31,7 @@
 
 #include <transform/transform2d.h>
 #include <type/odometry.h>
+#include <type/velocity2d.h>
 
 
 namespace NS_Controller
@@ -72,7 +73,7 @@ namespace NS_Controller
     NS_Service::Server< sgbot::Odometry >* odom_srv;
     NS_Service::Server< sgbot::tf::Transform2D >* odom_tf_srv;
 
-    NS_DataSet::Subscriber< NS_DataType::Twist >* twist_sub;
+    NS_DataSet::Subscriber< sgbot::Velocity2D >* twist_sub;
     NS_DataSet::Publisher<int>* slave_action_pub;
     NS_DataSet::Subscriber<int>* slave_action_sub;
     NS_DataSet::Publisher<int>*slave_event_pub;
@@ -118,7 +119,7 @@ namespace NS_Controller
     odomTransformService(sgbot::tf::Transform2D& transform);
 
     void
-    velocityCallback(NS_DataType::Twist& twist);
+    velocityCallback(sgbot::Velocity2D& velocity2d);
 
     void slaveActionSubscriber(int action);
 
