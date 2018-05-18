@@ -51,7 +51,7 @@ namespace NS_Controller
   {
     memset(&original_pose, 0, sizeof(original_pose));
     memset(&current_odometry, 0, sizeof(current_odometry));
-
+    last_action = 0;
     odom_srv = new NS_Service::Server< sgbot::Odometry >(
         "BASE_ODOM",
         boost::bind(&ControllerApplication::odomService, this, _1));
@@ -126,9 +126,10 @@ namespace NS_Controller
       int action = comm->getInt32Value(BASE_REG_ACTION);
       if(last_action!=action)
       {
+    	  DBG_PRINT("[pub action][%d][%d]\n", action);
     	  last_action = action;
     	  slave_action_pub->publish(action);
-    	  DBG_PRINT("[pub action]%d\n", action);
+
       }
       int event = comm->getInt32Value(BASE_REG_EVENT);
       if(event!=0)
