@@ -123,6 +123,7 @@ namespace NS_Controller
             NS_Transform::Vector3(original_pose.x, original_pose.y, 0));
             */
       }
+      boost::mutex::scoped_lock locker_(base_lock);
       int action = comm->getInt32Value(BASE_REG_ACTION);
       if(last_action!=action)
       {
@@ -276,6 +277,7 @@ namespace NS_Controller
   void ControllerApplication::slaveActionSubscriber(int action)
   {
 	  DBG_PRINT("[action sub]>>>>>%d\n", action);
+	  boost::mutex::scoped_lock locker_(base_lock);
 	  comm->setInt32Value(BASE_REG_ACTION, action);
   }
 
