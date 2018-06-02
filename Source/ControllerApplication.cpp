@@ -63,16 +63,15 @@ namespace NS_Controller
         "TWIST",
         boost::bind(&ControllerApplication::velocityCallback, this, _1));
 
-    slave_action_pub = new NS_DataSet::Publisher<int>(
-    	"SLAVE_ACTION"
-    	);
-
     slave_action_sub = new NS_DataSet::Subscriber<int>(
     	"MASTER_ACTION",
-		boost::bind(&ControllerApplication::slaveActionSubscriber, this, _1));
-    slave_event_pub = new NS_DataSet::Publisher<int>(
-    	"SLAVE_EVENT"
-    	);
+		boost::bind(&ControllerApplication::slaveActionCallback, this, _1));
+    plan_dist_sub = new NS_DataSet::Subscriber<float>(
+    		"PLAN_DIST",
+			boost::bind(&ControllerApplication::planDistanceCallback, this, _1));
+    plan_theta_sub = new NS_DataSet::Subscriber<float>(
+    		"PLAN_THETA",
+			boost::bind(&ControllerApplication::planThetaCallback, this, _1));
 
     //current_odom_transform.setIdentity();
   }
@@ -276,11 +275,27 @@ namespace NS_Controller
   }
 
 
-  void ControllerApplication::slaveActionSubscriber(int action)
+  void ControllerApplication::slaveActionCallback(int action)
   {
 	  DBG_PRINT("[action sub]>>>>>%d\n", action);
 	  boost::mutex::scoped_lock locker_(base_lock);
 	  comm->setInt32Value(BASE_REG_ACTION, action);
+  }
+
+  void ControllerApplication::planDistanceCallback(float distance)
+  {
+	  boost::mutex::scoped_lock locker_(base_lock);
+	  comm->setFloat32Value(BASE_REG_BORDER_DIST, distance);
+	  comm->setFloat32Value(BASE_REG_BORDER_THETA, 0);
+	  comm->setInt32Value(BASE_REG_BORDER_SYNC, 1);
+  }
+
+  void ControllerApplication::planThetaCallback(float theta)
+  {
+	  boost::mutex::scoped_lock locker_(base_lock);
+	  comm->setFloat32Value(BASE_REG_BORDER_THETA, theta);
+	  comm->setFloat32Value(BASE_REG_BORDER_DIST, 0.0f);
+	  comm->setInt32Value(BASE_REG_BORDER_SYNC, 1);
   }
 
   void ControllerApplication::loadParameters()

@@ -74,9 +74,13 @@ namespace NS_Controller
     NS_Service::Server< sgbot::tf::Transform2D >* odom_tf_srv;
 
     NS_DataSet::Subscriber< sgbot::Velocity2D >* twist_sub;
-    NS_DataSet::Publisher<int>* slave_action_pub;
+
     NS_DataSet::Subscriber<int>* slave_action_sub;
-    NS_DataSet::Publisher<int>*slave_event_pub;
+
+    NS_DataSet::Subscriber<float>* plan_dist_sub;
+
+    NS_DataSet::Subscriber<float>* plan_theta_sub;
+
   private:
     std::string comm_dev_name_;
 
@@ -121,9 +125,14 @@ namespace NS_Controller
     void
     velocityCallback(sgbot::Velocity2D& velocity2d);
 
-    void slaveActionSubscriber(int action);
+    void
+	slaveActionCallback(int action);
 
-    void slaveEventSubcriber(int event);
+    void
+	planDistanceCallback(float distance);
+
+    void
+	planThetaCallback(float theta);
 
     void
     loadParameters();
