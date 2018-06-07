@@ -327,6 +327,8 @@ namespace NS_Controller
     control_duration_ = parameter.getParameter("control_duration", 100);
     control_timeout_ = parameter.getParameter("control_timeout", 1000);
 
+    sync_duration_ = parameter.getParameter("sync_duration", 100);
+
     if(parameter.getParameter("use_ekf", 1) == 1)
     {
       use_ekf_ = true;
@@ -361,6 +363,8 @@ namespace NS_Controller
 
     comm->setInt32Value(BASE_REG_CNTL_DURATION, control_duration_);
     comm->setInt32Value(BASE_REG_VEL_TIMEOUT, control_timeout_);
+
+    comm->setInt32Value(BASE_REG_SYNC_DURATION, sync_duration_);
 
     comm->setInt32Value(BASE_REG_CFG_DONE, 1);
 
@@ -403,9 +407,12 @@ namespace NS_Controller
 
     running = true;
 
+    //get_pose_thread = boost::thread(
+    //    boost::bind(&ControllerApplication::getPoseLoop, this,
+     //               control_duration_));
     get_pose_thread = boost::thread(
-        boost::bind(&ControllerApplication::getPoseLoop, this,
-                    control_duration_));
+    		boost::bind(&ControllerApplication::getPoseLoop, this,
+    				   sync_duration_));
   }
 
   void ControllerApplication::quit()

@@ -58,7 +58,7 @@ namespace NS_Controller
       return false;
     }
 
-    NS_NaviCommon::delay(5);
+    NS_NaviCommon::delay(10);
 
     if(::read(spi_dev, rx_buf, rx_len) != rx_len)
     {

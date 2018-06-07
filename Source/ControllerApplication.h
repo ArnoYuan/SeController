@@ -111,6 +111,8 @@ namespace NS_Controller
 
     int control_duration_;
 
+    int sync_duration_;
+
     bool use_ekf_;
 
     int last_action;
