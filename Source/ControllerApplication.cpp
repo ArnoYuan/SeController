@@ -290,7 +290,9 @@ namespace NS_Controller
     gear_reduction_ = parameter.getParameter("gear_reduction", 62);
 
     wheel_track_ = parameter.getParameter("wheel_track", 0.265f);
-    accel_limit_ = parameter.getParameter("accel_limit", 1.0f);
+    linear_accel_limit_ = parameter.getParameter("linear_accel_limit", 1.0f);
+
+    angular_accel_limit_ = parameter.getParameter("angular_accel_limit", 5.0f);
 
     pid_kp_right_ = parameter.getParameter("pid_kp_r", 20.0f);
     pid_kd_right_ = parameter.getParameter("pid_kd_r", 12.0f);
@@ -327,7 +329,15 @@ namespace NS_Controller
     comm->setFloat64Value(BASE_REG_WHEEL_DIAMETER, wheel_diameter_);
     comm->setFloat64Value(BASE_REG_ENCODER_RESOLUTION, encoder_resolution_);
     comm->setFloat64Value(BASE_REG_GEAR_REDUCTION, gear_reduction_);
-    comm->setFloat64Value(BASE_REG_ACCEL_LIMIT, accel_limit_);
+
+    comm->setInt32Value(BASE_REG_CNTL_DURATION, control_duration_);
+    comm->setInt32Value(BASE_REG_VEL_TIMEOUT, control_timeout_);
+
+    comm->setInt32Value(BASE_REG_SYNC_DURATION, sync_duration_);
+
+    comm->setFloat32Value(BASE_REG_ACCEL_LIMIT, linear_accel_limit_);
+
+    comm->setFloat32Value(BASE_REG_ANGULAR_ACCEL_LIMIT, angular_accel_limit_);
 
     comm->setFloat64Value(BASE_REG_PID_KP_RIGHT, pid_kp_right_);
     comm->setFloat64Value(BASE_REG_PID_KI_RIGHT, pid_ki_right_);
@@ -343,10 +353,7 @@ namespace NS_Controller
     comm->setFloat64Value(BASE_REG_PID_MAX_LEFT, pid_max_left_);
     comm->setFloat64Value(BASE_REG_PID_MIN_LEFT, pid_min_left_);
 
-    comm->setInt32Value(BASE_REG_CNTL_DURATION, control_duration_);
-    comm->setInt32Value(BASE_REG_VEL_TIMEOUT, control_timeout_);
 
-    comm->setInt32Value(BASE_REG_SYNC_DURATION, sync_duration_);
 
     comm->setInt32Value(BASE_REG_CFG_DONE, 1);
 

@@ -62,7 +62,7 @@
 					</folderInfo>
 					<sourceEntries>
 						<entry excluding="Source" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
-						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Source"/>
+						<entry excluding="ExtendedKalmanFilter" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Source"/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>

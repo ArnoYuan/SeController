@@ -88,7 +88,8 @@ namespace NS_Controller
     int encoder_resolution_;
     int gear_reduction_;
     double wheel_track_;
-    double accel_limit_;
+    float linear_accel_limit_;
+    float angular_accel_limit_;
 
     int control_timeout_;
 
