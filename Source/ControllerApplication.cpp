@@ -67,10 +67,10 @@ namespace NS_Controller
     	"MASTER_ACTION",
 		boost::bind(&ControllerApplication::slaveActionCallback, this, _1));
     plan_dist_sub = new NS_DataSet::Subscriber<float>(
-    		"PLAN_DIST",
+    		"BORDER_DIST",
 			boost::bind(&ControllerApplication::planDistanceCallback, this, _1));
     plan_theta_sub = new NS_DataSet::Subscriber<float>(
-    		"PLAN_THETA",
+    		"BORDER_THETA",
 			boost::bind(&ControllerApplication::planThetaCallback, this, _1));
 
     //current_odom_transform.setIdentity();
