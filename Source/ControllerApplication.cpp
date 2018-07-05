@@ -72,7 +72,9 @@ namespace NS_Controller
     plan_theta_sub = new NS_DataSet::Subscriber<float>(
     		"BORDER_THETA",
 			boost::bind(&ControllerApplication::planThetaCallback, this, _1));
-
+    spath_sub = new NS_DataSet::Subscriber<sgbot::SpathMsg>(
+    		"SPATH_CNTL",
+			boost::bind(&ControllerApplication::spathCallback, this, _1));
     //current_odom_transform.setIdentity();
   }
 
@@ -278,6 +280,14 @@ namespace NS_Controller
 	  comm->setFloat32Value(BASE_REG_BORDER_THETA, theta);
 	  comm->setFloat32Value(BASE_REG_BORDER_DIST, 0.0f);
 	  comm->setInt32Value(BASE_REG_BORDER_SYNC, 1);
+  }
+
+  void ControllerApplication::spathCallback(sgbot::SpathMsg & msg)
+  {
+	  boost::mutex::scoped_lock locker_(base_lock);
+	  comm->setFloat32Value(BASE_REG_SPATH_THETA, msg.theta);
+	  comm->setInt32Value(BASE_REG_SPATH_DIR, msg.dir);
+	  comm->setInt32Value(BASE_REG_SPATH_SYNC, 1);
   }
 
   void ControllerApplication::loadParameters()

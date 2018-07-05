@@ -32,6 +32,7 @@
 #include <transform/transform2d.h>
 #include <type/odometry.h>
 #include <type/velocity2d.h>
+#include <type/spath_msg.h>
 
 
 namespace NS_Controller
@@ -80,6 +81,8 @@ namespace NS_Controller
     NS_DataSet::Subscriber<float>* plan_dist_sub;
 
     NS_DataSet::Subscriber<float>* plan_theta_sub;
+
+    NS_DataSet::Subscriber<sgbot::SpathMsg>* spath_sub;
 
   private:
     std::string comm_dev_name_;
@@ -136,6 +139,8 @@ namespace NS_Controller
 
     void
 	planThetaCallback(float theta);
+
+    void spathCallback(sgbot::SpathMsg & msg);
 
     void
     loadParameters();

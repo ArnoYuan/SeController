@@ -77,7 +77,10 @@ namespace NS_Controller
 
 		BASE_REG_SYNC_DURATION	=0x118,
 
-		BASE_REG_END	=0x11C,
+		BASE_REG_SPATH_DIR = 0x11C,
+		BASE_REG_SPATH_THETA = 0x120,
+		BASE_REG_SPATH_SYNC = 0x124,
+		BASE_REG_END	=0x128,
   };
 
   typedef struct
